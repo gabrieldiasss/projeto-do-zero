@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Header } from "../components/Header";
 import styles from "./home.module.scss";
 
 import { FiCalendar } from "react-icons/fi";
@@ -13,11 +12,9 @@ export default function Home() {
 				<title>Space Traveling</title>
 			</Head>
 
-			<Header />
-
 			<main className={styles.containerPosts}>
 				<div className={styles.posts}>
-					<Link href={`post`}>
+					<Link href={`post`}  passHref>
 						<div className={styles.post} >
 							<strong>Como utilizar Hooks</strong>
 							<p>Pensando em sincronização em vez de ciclos de vida.</p>
@@ -33,7 +30,7 @@ export default function Home() {
 						</div>
 					</Link>
 
-					<Link href={`post`} >
+					<Link href={`post`} passHref>
 						<div className={styles.post} >
 							<strong>Como utilizar Hooks</strong>
 							<p>Pensando em sincronização em vez de ciclos de vida.</p>
