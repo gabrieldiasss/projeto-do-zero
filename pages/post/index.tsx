@@ -1,6 +1,7 @@
 import Head from "next/head";
 import styles from './styles.module.scss'
 import { FiClock, FiCalendar, FiUser } from 'react-icons/fi'
+import Image from "next/image";
 
 export default function Post() {
 
@@ -11,9 +12,9 @@ export default function Post() {
                 <title> Como utilizar hooks | Space Traveling </title>
             </Head>
 
-            <main className={styles.content} >
+            <main className={styles.container} >
 
-                <img src="Banner.png" alt="" />
+                <img src="/Banner.png" alt="" />
 
                 <article className={styles.post} >
                     <h1>Criando um app CRA do zero</h1>
