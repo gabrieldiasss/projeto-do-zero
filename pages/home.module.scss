@@ -1,0 +1,51 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.containerPosts {
+    margin-top: 2rem;
+}
+
+.posts {
+
+    .post {
+
+        cursor: pointer;
+
+        strong {
+            font-size: 1.4rem;
+            color: var(--gray-200);
+        }
+
+        p {
+            margin-top: 0.6rem;
+            color: var(--gray-300);
+            font-weight: 400;
+        }
+
+        .infosPosts {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+
+            gap: 16px;
+
+            color: var(--gray-400);
+        }
+
+        & + div {
+            margin-top: 2rem;
+        }
+    }
+
+
+}
+
+.info {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
