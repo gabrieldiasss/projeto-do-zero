@@ -8,12 +8,17 @@ import { GetServerSideProps } from "next";
 import { getPrismicClient } from "../services/prismic";
 import Prismic from "@prismicio/client";
 
+import { format, parseISO } from "date-fns";
+import ptBR from 'date-fns/locale/pt-BR';
+
 interface Posts {
 	uid: string;
+	first_publication_date: string;
 	data: {
 		title: string;
 		subtitle: string;
 		author: string;
+		
 	};
 }
 
@@ -22,6 +27,15 @@ interface PostsProps {
 }
 
 export default function Home({ response }: PostsProps) {
+
+	const date = parseISO('2022-04-08T16:24:17')
+
+    const formattedDate = format(
+        date,
+        "dd MMM yyy",
+        { locale: ptBR }
+    )
+
 
 	return (
 		<div className={styles.container}>
@@ -38,7 +52,15 @@ export default function Home({ response }: PostsProps) {
 								<p>{post.data.subtitle}</p>
 								<div className={styles.infosPosts}>
 									<div className={styles.info}>
-										<FiCalendar /> 19 Abr 2021
+										<FiCalendar /> {
+
+											format(
+												parseISO(post.first_publication_date),
+												"dd MMM yyy",
+												{ locale: ptBR }
+											)
+										
+										}
 									</div>
 
 									<div className={styles.info}>

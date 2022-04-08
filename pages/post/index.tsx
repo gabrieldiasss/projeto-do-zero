@@ -1,7 +1,9 @@
 import Head from "next/head";
 import styles from './styles.module.scss'
 import { FiClock, FiCalendar, FiUser } from 'react-icons/fi'
-import Image from "next/image";
+
+import { format, parseISO, } from 'date-fns';
+
 
 export default function Post() {
 
