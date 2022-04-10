@@ -4,7 +4,7 @@ import styles from "./home.module.scss";
 import { FiCalendar } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import { getPrismicClient } from "../services/prismic";
 import Prismic from "@prismicio/client";
 
@@ -14,6 +14,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 interface Posts {
 	uid: string;
 	first_publication_date: string;
+	slug: string;
 	data: {
 		title: string;
 		subtitle: string;
@@ -23,19 +24,12 @@ interface Posts {
 }
 
 interface PostsProps {
-	response: Posts[];
+	response: {
+		results: Posts[];
+	}
 }
 
 export default function Home({ response }: PostsProps) {
-
-	const date = parseISO('2022-04-08T16:24:17')
-
-    const formattedDate = format(
-        date,
-        "dd MMM yyy",
-        { locale: ptBR }
-    )
-
 
 	return (
 		<div className={styles.container}>
@@ -45,8 +39,8 @@ export default function Home({ response }: PostsProps) {
 
 			<main className={styles.containerPosts}>
 				<div className={styles.posts}>
-					{response?.map((post, key) => (
-						<Link key={key} href={`post`} passHref  >
+					{response.results.map((post, key) => (
+						<Link key={key} href={`/post/${post.uid}`} passHref>
 							<div className={styles.post}>
 								<strong>{post.data.title}</strong>
 								<p>{post.data.subtitle}</p>
@@ -59,7 +53,7 @@ export default function Home({ response }: PostsProps) {
 												"dd MMM yyy",
 												{ locale: ptBR }
 											)
-										
+
 										}
 									</div>
 
@@ -70,29 +64,13 @@ export default function Home({ response }: PostsProps) {
 							</div>
 						</Link>
 					))}
-
-					{/* 	<Link href={`post`} passHref>
-						<div className={styles.post} >
-							<strong>Como utilizar Hooks</strong>
-							<p>Pensando em sincronização em vez de ciclos de vida.</p>
-							<div className={styles.infosPosts}>
-								<div className={styles.info}>
-									<FiCalendar /> 19 Abr 2021
-								</div>
-
-								<div className={styles.info}>
-									<FiUser /> Danilo Vieira
-								</div>
-							</div>
-						</div>
-					</Link> */}
 				</div>
 			</main>
 		</div>
 	);
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
 	const prismic = getPrismicClient();
 
 	const response = await prismic.query(
@@ -106,7 +84,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 	return {
 		props: {
-			response: response.results,
+			response,
 		},
+
+		revalidate: 60 * 60 * 24, // 24 hours
 	};
 };
