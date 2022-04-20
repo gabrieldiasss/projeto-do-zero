@@ -8,6 +8,9 @@ import { getPrismicClient } from "../../services/prismic";
 
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+import Prismic from "@prismicio/client";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface Post {
     first_publication_date: string;
@@ -21,7 +24,6 @@ interface Post {
             }[];
         }[];
     };
-
 }
 
 interface PostProps {
@@ -31,9 +33,31 @@ interface PostProps {
 
 export default function Post({ response, formattedDate }: PostProps) {
 
+    /* const router = useRouter()
+
+    if (router.isFallback) {
+        return <h1>Carregando...</h1>
+    } */
+
+    const wordsHeading: any = response?.data.content.map(value => value.heading)
+    let wordCount: any = 1
+    for (let i = 0; i <= wordsHeading?.length; i++) {
+
+        const title: any = wordsHeading[i]
+
+        for(let i = 0; title.length; i++) {
+            if (wordsHeading.charAt(i) == ' ') {
+                wordCount++
+            }
+        }
+
+        console.log(wordCount)
+       
+    }
+
+
     
 
-   
     return (
         <div>
             <Head>
@@ -41,7 +65,7 @@ export default function Post({ response, formattedDate }: PostProps) {
             </Head>
 
             <main className={styles.container}>
-                <img src="/Banner.png" alt="" />
+                <Image src="/Banner.png" alt="" />
 
                 <article className={styles.post}>
                     <h1>{response?.data.title}</h1>
@@ -88,8 +112,23 @@ export default function Post({ response, formattedDate }: PostProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+
+    const prismic = getPrismicClient()
+
+    const posts = await prismic.query([
+        Prismic.predicates.at('document.type', "posts")
+    ])
+
+    const paths = posts.results.map(post => {
+        return {
+            params: {
+                slug: post.uid
+            }
+        }
+    })
+
     return {
-        paths: [],
+        paths,
         fallback: true,
     };
 };
@@ -102,8 +141,6 @@ export const getStaticProps: GetStaticProps = async (
     const { slug } = context.params!;
 
     const response = await prismic.getByUID("posts", String(slug), {});
-
-
 
     const formattedDate = format(
         parseISO(response.first_publication_date!),

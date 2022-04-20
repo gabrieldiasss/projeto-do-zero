@@ -19,7 +19,6 @@ interface Posts {
 		title: string;
 		subtitle: string;
 		author: string;
-		
 	};
 }
 
@@ -47,13 +46,11 @@ export default function Home({ response }: PostsProps) {
 								<div className={styles.infosPosts}>
 									<div className={styles.info}>
 										<FiCalendar /> {
-
 											format(
 												parseISO(post.first_publication_date),
 												"dd MMM yyy",
 												{ locale: ptBR }
 											)
-
 										}
 									</div>
 
